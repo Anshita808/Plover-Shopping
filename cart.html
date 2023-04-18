@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> cart page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Cookie&family=Poppins:wght@700;800&family=Rowdies:wght@300&family=Satisfy&display=swap');
+        .logo>div>a>h1{       
+    font-family: 'Anton', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Rowdies', cursive;
+    font-family: 'Satisfy', cursive;
+    color: whitesmoke;
+    margin-right: 120px;
+}
+.logo>div>a{
+    text-decoration: none;
+}
+#TotalP{
+   width: 100%;
+   margin: auto;
+   background-color: #0277BD;
+   color: white;
+   font-size: 28px;
+   margin-top: 4px;
+   font-family: 'Anton', sans-serif;
+font-family: 'Cookie', cursive;
+font-family: 'Poppins', sans-serif;
+font-family: 'Rowdies', cursive;
+font-family: 'Satisfy', cursive;
+padding: 10px;
+}
+#Total{
+    width: 100%;
+   margin: auto;
+   background-color: #0277BD;
+   color: white;
+   font-size: 35px;
+   margin-top: 4px;
+   padding: 10px;
+}
+.myImage{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    margin-top: 50px;
+    
+}
+#image{
+
+    width: 50%;
+}
+.cart{
+    display: flex;
+    justify-content:center;
+}
+#btn{
+    text-align: center;
+}
+#btn button{
+    width: 10%;
+    font-size: 15px;
+    background-color: #0277BD;
+    color: white;
+    padding: 9px;
+    border: none;
+    cursor: pointer;
+}
+#btn>a{
+    text-decoration: none;
+}
+
+    </style>
+</head>
+<body>
+    <!-- nav part -->
+    <div class="nav">    
+   <div>
+    <i class="fa-solid fa-tag"></i>
+    <h3>Get Free Shopping and Rewards</h3>
+   </div>
+    <div>
+        <i class="fa-solid fa-circle-question"></i>
+        <i class="fa-sharp fa-solid fa-location-dot"></i>
+        <a href="./signUp.html"><i class="fa-solid fa-user-large"></i></a>
+         <i class="fa-solid fa-cart-shopping"></i>
+       
+    </div>
+</div>
+<!-- logo part -->
+<div class="logo">
+    <div>
+        <i class="fa-solid fa-dove"></i>
+       <a href="./index.html"><h1>Plover </h1></a> 
+    </div>
+    <!-- mid part -->
+    <div class="mid">
+        <div>
+            <h4>Men</h4>
+            <h4>Women</h4>
+            <h4>Kids</h4>
+            <h4>Footwear</h4>
+            <h4>Activity</h4>
+            <h4>Featured</h4>
+            <h4>Winter Sale</h4>
+        </div>
+        <div>
+            <input type="text" placeholder="Search">
+        </div>
+    </div>
+</div>
+<div class="cart">
+    <h1 id="TotalP">Total Price</h1>
+    <h1 id="Total"></h1>
+</div>
+<div class="myImage">
+    <img id="image" src="https://rukminim1.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png?q=90" alt="" style="display: none;">
+</div>
+<div id="btn">
+<a href="./index.html"><button>Shop Now</button></a>
+</div>
+<div class="product">
+    <!-- Append here product card-->
+  </div>
+
+</body>
+</html>
+<script>
+    let btn = document.querySelector("button")
+    let image = document.getElementById("image")
+    let TotalPEl = document.getElementById("TotalP")
+    let Total = document.getElementById("Total")
+    let product = document.querySelector(".product");
+    let arr = JSON.parse(localStorage.getItem("cart"))||[];
+
+    function Display() {
+
+product.innerHTML = "";
+arr.forEach((element, index) => {
+  
+    let div = document.createElement("div");
+    div.setAttribute("class","mycard")
+    let img = document.createElement("img");
+    img.src = element.image;
+    let category = document.createElement("h3");
+    category.innerText = element.category
+    let price = document.createElement("h3");
+    price.innerText = `₹${element.price}`
+    let title = document.createElement("h2");
+    title.innerText = element.title
+    let add_to_cart = document.createElement("button");
+    let quantity = document.createElement("span");
+    quantity.innerText = element.quantity;
+    let inc = document.createElement("button");
+    inc.innerText = "+";
+    inc.addEventListener("click",()=>{
+       let prod = element.quantity++;
+        localStorage.setItem("cart",JSON.stringify(arr));
+            Display();
+    })
+    let dec = document.createElement("button");
+    dec.innerText = "-";
+    dec.addEventListener("click",()=>{
+      
+       if(element.quantity>1){
+        let prod = element.quantity--
+        // localStorage.setItem("cart",JSON.stringify(arr)); //with LS works but sometimes after refresh
+            Display();
+       }
+    })
+        add_to_cart.innerText = "Remove"
+        add_to_cart.addEventListener("click",()=>{
+            arr = arr.filter((ele,i)=>{
+                if(index==i){
+                    return false
+                }else{
+                    return true
+                }
+            })
+            localStorage.setItem("cart",JSON.stringify(arr));
+            Display(arr);
+
+        })
+      
+    product.append(div)
+    div.append(img, title,category,price, inc,quantity,dec,add_to_cart);
+})
+  let sum=0;
+  for(let i=0; i<arr.length; i++){
+    sum += arr[i].price*arr[i].quantity
+  }
+ 
+  if(sum==0){
+    TotalPEl.innerText = "Your cart is empty"
+    Total.style.display = "none";
+    image.style.display="inline";
+    btn.style.display="inline";
+  }else{
+    Total.innerText = Math.ceil(sum);
+    btn.style.display = "none";
+  }
+ }
+ 
+
+ Display(arr);
+</script>
